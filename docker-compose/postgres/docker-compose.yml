@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   database-1:
     image: 'postgres:alpine3.20'
@@ -19,4 +17,4 @@ volumes:
       o: bind
       type: none
 #      TODO remove this on commit and push
-      device: D:/Github/webflux-example/docker-compose/postgres/data
+      device: /Users/andika.prapmanto/IdeaProjects/boa-ext/webflux-example/docker-compose/postgres/data

@@ -28,7 +28,7 @@ public class EmployeeController {
     @PostMapping
     public Mono<ResponseEntity<GenericResponseDto<EmployeeDto>>> saveHoliday(ServerHttpRequest serverHttpRequest, @RequestBody @Valid EmployeeDto employeeDto) {
         log.info(LogTemplate.CONTROLLER_REQUEST_LOG_INFO, serverHttpRequest.getMethod(), serverHttpRequest.getPath(), employeeDto);
-        
+        System.out.println(serverHttpRequest.getHeaders().getValuesAsList("accept-language"));
         return this.employeeService.save(employeeDto)
                 .map(holiday -> {
                     GenericResponseDto<EmployeeDto> responseData = GenericResponseDto.<EmployeeDto>builder()

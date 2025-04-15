@@ -41,6 +41,20 @@ public class OpenApiConfig {
                             .schema(new StringSchema())
                             .in("header")
                     );
+                    operation.addParametersItem(new Parameter()
+                            .name("locale")
+                            .description("Custom header for all APIs")
+                            .required(false)
+                            .schema(new StringSchema())
+                            .in("header")
+                    );
+                    operation.addParametersItem(new Parameter()
+                            .name("X-Trace-Id")
+                            .description("Custom header for all APIs")
+                            .required(false)
+                            .schema(new StringSchema())
+                            .in("header")
+                    );
                 })
         );
     }

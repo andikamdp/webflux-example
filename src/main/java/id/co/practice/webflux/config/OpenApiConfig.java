@@ -49,7 +49,21 @@ public class OpenApiConfig {
                             .in("header")
                     );
                     operation.addParametersItem(new Parameter()
-                            .name("X-Trace-Id")
+                            .name("X-B3-TraceId")
+                            .description("Custom header for all APIs")
+                            .required(false)
+                            .schema(new StringSchema())
+                            .in("header")
+                    );
+                    operation.addParametersItem(new Parameter()
+                            .name("X-B3-Sampled")
+                            .description("Custom header for all APIs")
+                            .required(false)
+                            .schema(new StringSchema())
+                            .in("header")
+                    );
+                    operation.addParametersItem(new Parameter()
+                            .name("X-B3-SpanId")
                             .description("Custom header for all APIs")
                             .required(false)
                             .schema(new StringSchema())

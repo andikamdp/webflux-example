@@ -1,5 +1,6 @@
 package id.co.practice.webflux.util;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -35,5 +36,17 @@ public class DateTimeUtil {
         DateTimeFormatter formatter = getFormatter(DEFAULT_BASIC_DATE_FORMAT);
 
         return ZonedDateTime.parse(date, formatter);
+    }
+
+    public static boolean isLocalDateToday(LocalDate date) {
+        return date.equals(LocalDate.now());
+    }
+
+    public static boolean isLocalDateBeforeNow(LocalDate date) {
+        return date.isBefore(LocalDate.now().minusDays(1));
+    }
+
+    public static boolean isLocalDateAfterNow(LocalDate date) {
+        return date.isAfter(LocalDate.now().plusDays(1));
     }
 }

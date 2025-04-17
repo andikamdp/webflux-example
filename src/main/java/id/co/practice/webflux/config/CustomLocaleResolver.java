@@ -4,11 +4,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.i18n.LocaleContext;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.i18n.AcceptHeaderLocaleContextResolver;
-import reactor.core.publisher.Mono;
 
 import java.util.Locale;
-
-import static javax.swing.JComponent.getDefaultLocale;
 
 @Configuration
 public class CustomLocaleResolver extends AcceptHeaderLocaleContextResolver {

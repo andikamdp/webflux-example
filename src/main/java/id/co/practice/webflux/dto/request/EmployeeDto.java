@@ -1,39 +1,61 @@
 package id.co.practice.webflux.dto.request;
 
-import id.co.practice.webflux.anotation.ConditionalValidation;
-import id.co.practice.webflux.anotation.ConditionalValidations;
-import jakarta.validation.constraints.*;
-import lombok.*;
+import id.co.practice.webflux.dto.response.ValidationErrorResponseDto;
+import id.co.practice.webflux.util.DateTimeUtil;
+import id.co.practice.webflux.util.MessageSourceUtil;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Getter
 @Setter
-@ConditionalValidations({
-        @ConditionalValidation(field = "identityId", dependentField = "name", message = "Name is required when Identity ID is provided"),
-        @ConditionalValidation(field = "email", dependentField = "phoneNumber", message = "Phone number is required when email is provided")
-})public class EmployeeDto {
+public class EmployeeDto {
     private UUID id;
-    @NotEmpty
-    @Size(min = 1, max = 20)
-    @Pattern(regexp = "^[0-9]+$")
     private String identityId;
-    @NotEmpty
-    @Size(min = 1, max = 50)
-    @Pattern(regexp = "^[a-zA-Z ]+$")
     private String name;
-    @Past
     private LocalDate birthDate;
-    @FutureOrPresent
     private LocalDate joinDate;
-    @Min(value = 0, message = "{invalid.salary}")
-    @Max(value = 1000000000)
-    @Positive
-    @Digits(integer = 10, fraction = 2)
     private BigDecimal salary;
+
+    private String maritalStatus;
+
     private int status;
 
+
+    public List<ValidationErrorResponseDto> validate(boolean isUpdate, Locale locale) {
+        List<ValidationErrorResponseDto> validationErrorResponseDtoList = new ArrayList<>();
+
+        // Custom validation logic can be added here
+        if (isUpdate && (this.getId() != null)) {
+            validationErrorResponseDtoList.add(new ValidationErrorResponseDto("employee.id", MessageSourceUtil.getErrorMessage(locale, "employee.id")));
+        }
+
+        if (this.getIdentityId() != null && this.getIdentityId().matches("^[0-9]{1,20}$")) {
+            validationErrorResponseDtoList.add(new ValidationErrorResponseDto("employee.identityId", MessageSourceUtil.getErrorMessage(locale, "employee.identityId")));
+        }
+
+        if (this.getName() == null || this.getName().matches("^[a-zA-Z ]{1,50}$")) {
+            validationErrorResponseDtoList.add(new ValidationErrorResponseDto("employee.name", MessageSourceUtil.getErrorMessage(locale, "employee.name")));
+        }
+
+        if (this.getJoinDate() == null || (DateTimeUtil.isLocalDateToday(this.getJoinDate()) || DateTimeUtil.isLocalDateAfterNow(this.getJoinDate()))) {
+            validationErrorResponseDtoList.add(new ValidationErrorResponseDto("employee.joinDate", MessageSourceUtil.getErrorMessage(locale, "employee.joinDate")));
+        }
+
+        if (this.getBirthDate() == null || (DateTimeUtil.isLocalDateBeforeNow(this.getBirthDate()))) {
+            validationErrorResponseDtoList.add(new ValidationErrorResponseDto("employee.birthDate", MessageSourceUtil.getErrorMessage(locale, "employee.birthDate")));
+        }
+
+        if (this.getSalary() == null || this.getSalary().compareTo(BigDecimal.ONE) < 0 || this.getSalary().toPlainString().matches("^\\d{1,10}(\\.\\d{1,2})?$")) {
+            validationErrorResponseDtoList.add(new ValidationErrorResponseDto("employee.salary", MessageSourceUtil.getErrorMessage(locale, "employee.salary")));
+        }
+
+        return validationErrorResponseDtoList;
+    }
 }

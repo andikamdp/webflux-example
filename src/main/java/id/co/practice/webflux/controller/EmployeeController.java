@@ -4,6 +4,7 @@ import id.co.practice.webflux.constant.LogTemplate;
 import id.co.practice.webflux.dto.request.EmployeeDto;
 import id.co.practice.webflux.dto.response.GenericResponseDto;
 import id.co.practice.webflux.service.impl.EmployeeServiceImpl;
+import id.co.practice.webflux.util.LoggingUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +29,9 @@ public class EmployeeController {
     @PostMapping
     public Mono<ResponseEntity<GenericResponseDto<EmployeeDto>>> saveHoliday(ServerHttpRequest serverHttpRequest, @RequestBody @Valid EmployeeDto employeeDto) {
         log.info(LogTemplate.CONTROLLER_REQUEST_LOG_INFO, serverHttpRequest.getMethod(), serverHttpRequest.getPath(), employeeDto);
-        System.out.println(serverHttpRequest.getHeaders().getValuesAsList("accept-language"));
+        LoggingUtil.logRequest(serverHttpRequest.getMethod().name(), serverHttpRequest.getPath().value(), employeeDto.toString());
         return this.employeeService.save(employeeDto)
+                .doOnNext(employeeDto1 -> {log.info(LogTemplate.CONTROLLER_REQUEST_LOG_INFO.concat(" inside reactor"), serverHttpRequest.getMethod(), serverHttpRequest.getPath(), employeeDto);})
                 .map(holiday -> {
                     GenericResponseDto<EmployeeDto> responseData = GenericResponseDto.<EmployeeDto>builder()
                             .code("00")
@@ -97,6 +99,12 @@ public class EmployeeController {
                 .doOnNext(response -> log.info(LogTemplate.CONTROLLER_RESPONSE_LOG_INFO, response, HttpStatus.OK));
     }
 
-
-    
 }
+
+/*
+* 67ff640ea4adf37d
+* 44b7a6aeba5d9770
+* f62b50da931c5
+* a68b9a0185101702
+*
+* */

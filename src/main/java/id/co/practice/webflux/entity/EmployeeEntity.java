@@ -7,7 +7,6 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Table(schema = "public", name = "tbl_employee_tm")

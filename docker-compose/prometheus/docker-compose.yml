@@ -1,0 +1,18 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - webflux-practice
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+networks:
+  webflux-practice:
+    external: true

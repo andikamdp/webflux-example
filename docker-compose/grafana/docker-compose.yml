@@ -1,0 +1,27 @@
+services:
+  grafana:
+    image: grafana/grafana:latest
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - webflux-practice
+
+volumes:
+  grafana-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /Users/[]/IdeaProjects/boa-ext/webflux-example/docker-compose/grafana/data
+
+networks:
+  webflux-practice:
+    external: true
